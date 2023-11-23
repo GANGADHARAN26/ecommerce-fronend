@@ -57,13 +57,13 @@ const ProductCard = (props) => {
           </div>
           <div className="action-bar position-absolute">
             <div className="d-flex flex-column gap-15">
-              <Link to={""}>
+              <Link to={"#"}>
                 <img src={prodcompare} alt="compare" />
               </Link>
-              <Link to={""}>
+              <Link to={"#"}>
                 <img src={view} alt="view" />
               </Link>
-              <Link to={""}>
+              <Link to={"#"}>
                 <img src={addcart} alt="addcart" />
               </Link>
             </div>
@@ -113,13 +113,13 @@ const ProductCard = (props) => {
           </div>
           <div className="action-bar position-absolute">
             <div className="d-flex flex-column gap-15">
-            <Link to={""}>
+            <Link to={"#"}>
                 <img src={prodcompare} alt="compare" />
               </Link>
-              <Link to={""}>
+              <Link to={"#"}>
                 <img src={view} alt="view" />
               </Link>
-              <Link to={""}> 
+              <Link to={"#"}> 
                 <img src={addcart} alt="addcart" />
               </Link>
             </div>
