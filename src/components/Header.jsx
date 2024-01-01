@@ -1,6 +1,52 @@
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import { BsSearch } from "react-icons/bs";
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect, useState } from "react";
+import { Typeahead } from "react-bootstrap-typeahead";
+import "react-bootstrap-typeahead/css/Typeahead.css";
+import { getUserCart } from "../features/user/userSlice";
+import { getAProduct, getAllProducts } from "../features/products/productSlice";
 const Header = () => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  useEffect(() => {
+    getProducts();
+    setTimeout(() => {
+      dispatch(getUserCart())
+    }, 2000);
+  }, []);
+
+  const cartState = useSelector((state) => state?.auth?.cartProducts || []);
+  const authState = useSelector((state) => state?.auth);
+  const [paginate, setPaginate] = useState(true);
+
+  const [total, setTotal] = useState(null);
+  const productState = useSelector((state) => state?.product?.products );
+  const [productOpt, setProductOpt] = useState([]);
+  const getProducts = () => {
+    dispatch(getAllProducts());
+    
+  };
+  useEffect(() => {
+    let sum = 0;
+    for (let index = 0; index < cartState.length; index++) {
+      sum += Number(cartState[index].quantity) * Number(cartState[index].price);
+      setTotal(sum);
+    }
+  }, [cartState]);
+  useEffect(() => {
+    let data = [];
+    for (let index = 0; index < productState?.length; index++) {
+      const element = productState[index];
+      data.push({ id: index, prod: element?._id, name: element?.title });
+    }
+    setProductOpt(data);
+  }, [productState]);
+
+  const handleLogout = () => {
+    localStorage.clear();
+    window.location.reload();
+  };
   return (
     <>
       <header className="header-top-strip py-2">
@@ -27,17 +73,23 @@ const Header = () => {
           <div className="row align-items-center">
             <div className="col-2">
               <h4>
-                <Link className="text-white">Dev Corner.</Link>
+                <Link className="text-white">Digitic.</Link>
               </h4>
             </div>
             <div className="col-5">
               <div className="input-group">
-                <input
-                  type="text"
-                  className="form-control py-2"
-                  placeholder="Search Product Here..."
-                  aria-label="Search Product Here"
-                  aria-describedby="basic-addon2"
+                <Typeahead
+                  id="pagination-example"
+                  onPaginate={() => console.log("Results paginated")}
+                  onChange={(selected) => {
+                    navigate(`/product/${selected[0]?.prod}`);
+                    dispatch(getAProduct(selected[0]?.prod))
+                  }}
+                  options={productOpt}
+                  paginate={paginate}
+                  labelKey={'name'}
+                  minLength={2}
+                  placeholder="Search for Product here..."
                 />
                 <span className="input-group-text p-3" id="basic-addon2">
                   <BsSearch className="fs-6" />
@@ -47,15 +99,21 @@ const Header = () => {
             <div className="col-5">
               <div className="header-upper-links d-flex align-items-center justify-content-between">
                 <div>
-                  <Link to='/compare-product' className="d-flex align-items-center gap-10 text-white">
+                  {/* <Link
+                    to="/compare-product"
+                    className="d-flex align-items-center gap-10 text-white"
+                  >
                     <img src="/images/compare.svg" alt="compare" />
                     <p className="mb-0 fs-10">
                       Compare <br /> Products
                     </p>
-                  </Link>
+                  </Link> */}
                 </div>
                 <div>
-                  <Link to='wishlist' className="d-flex align-items-center gap-10 text-white">
+                  <Link
+                    to="wishlist"
+                    className="d-flex align-items-center gap-10 text-white"
+                  >
                     <img src="/images/wishlist.svg" alt="wishlist" />
                     <p className="mb-0  fs-10">
                       Favourite <br /> wishlist
@@ -63,19 +121,33 @@ const Header = () => {
                   </Link>
                 </div>
                 <div>
-                  <Link to='/login' className="d-flex align-items-center gap-10 text-white">
+                  <Link
+                    to={authState?.user === null ? "/login" : "/my-profile"}
+                    className="d-flex align-items-center gap-10 text-white"
+                  >
                     <img src="/images/user.svg" alt="user" />
-                    <p className="mb-0 fs-10">
-                      Log in <br /> My Account
-                    </p>
+                    {authState?.user === null ? (
+                      <p className="mb-0 fs-10">
+                        Log in <br /> My Account
+                      </p>
+                    ) : (
+                      <p className="mb-0 fs-10">
+                        Welcome {authState?.user?.firstname}
+                      </p>
+                    )}
                   </Link>
                 </div>
                 <div>
-                  <Link to='/cart' className="d-flex align-items-center gap-10 text-white">
+                  <Link
+                    to="/cart"
+                    className="d-flex align-items-center gap-10 text-white"
+                  >
                     <img src="/images/cart.svg" alt="cart" />
                     <div className="d-flex flex-column">
-                      <span className="badge bg-white text-dark">0</span>
-                      <p className="mb-0 fs-10">$ 500</p>
+                      <span className="badge bg-white text-dark">
+                        {cartState?.length ? cartState?.length : 0}
+                      </span>
+                      <p className="mb-0 fs-10">$ {total ? total : "0"}</p>
                     </div>
                   </Link>
                 </div>
@@ -98,25 +170,26 @@ const Header = () => {
                       data-bs-toggle="dropdown"
                       aria-expanded="false"
                     >
-                     <img src="/images/menu.svg" alt="" /><span className="me-5 d-inline">Shop Categories</span>
+                      <img src="/images/menu.svg" alt="" />
+                      <span className="me-5 d-inline">Shop Categories</span>
                     </button>
                     <ul
                       className="dropdown-menu"
                       aria-labelledby="dropdownMenuButton1"
                     >
                       <li>
-                        <Link className="dropdown-item text-white" to="">
+                        <Link className="dropdown-item text-white" to="/">
                           Action
                         </Link>
                       </li>
                       <li>
-                        <Link className="dropdown-item text-white" to="">
+                        <Link className="dropdown-item text-white" to="/">
                           Another action
                         </Link>
                       </li>
-                      
+
                       <li>
-                        <Link className="dropdown-item text-white" to="">
+                        <Link className="dropdown-item text-white" to="/">
                           Something else here
                         </Link>
                       </li>
@@ -127,8 +200,16 @@ const Header = () => {
                   <div className="d-flex align-items-center gap-15">
                     <NavLink to="/">Home</NavLink>
                     <NavLink to="/product">Our Store</NavLink>
+                    <NavLink to="/my-orders">My Orders</NavLink>
                     <NavLink to="/blogs">Blogs</NavLink>
                     <NavLink to="/contact">Contact</NavLink>
+                    <button
+                      onClick={handleLogout}
+                      className="border border-0 bg-transparent text-white text-uppercase"
+                      type="button"
+                    >
+                      Logout
+                    </button>
                   </div>
                 </div>
               </div>
