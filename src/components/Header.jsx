@@ -6,6 +6,7 @@ import { Typeahead } from "react-bootstrap-typeahead";
 import "react-bootstrap-typeahead/css/Typeahead.css";
 import { getUserCart } from "../features/user/userSlice";
 import { getAProduct, getAllProducts } from "../features/products/productSlice";
+
 const Header = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -121,6 +122,10 @@ const Header = () => {
                   </Link>
                 </div>
                 <div>
+                <NavLink className='text-decoration-none text-white' to="/my-orders"><p className="mb-0 fs-10">My Orders <br/>& Details</p></NavLink>
+
+                </div>
+                <div>
                   <Link
                     to={authState?.user === null ? "/login" : "/my-profile"}
                     className="d-flex align-items-center gap-10 text-white"
@@ -132,7 +137,7 @@ const Header = () => {
                       </p>
                     ) : (
                       <p className="mb-0 fs-10">
-                        Welcome {authState?.user?.firstname}
+                        Welcome <br />{authState?.user?.firstname}
                       </p>
                     )}
                   </Link>
@@ -200,7 +205,6 @@ const Header = () => {
                   <div className="d-flex align-items-center gap-15">
                     <NavLink to="/">Home</NavLink>
                     <NavLink to="/product">Our Store</NavLink>
-                    <NavLink to="/my-orders">My Orders</NavLink>
                     <NavLink to="/blogs">Blogs</NavLink>
                     <NavLink to="/contact">Contact</NavLink>
                     <button

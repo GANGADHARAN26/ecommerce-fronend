@@ -1,7 +1,6 @@
 import { Link, useNavigate } from "react-router-dom";
 import Marquee from "react-fast-marquee";
 import BlogCart from "./../components/BlogCart";
-import ProductCard from "../components/ProductCard";
 import SpecialProduct from "../components/SpecialProduct";
 import Container from "../components/Container";
 import { services } from "../utils/Data";
@@ -15,7 +14,6 @@ import prodcompare from "../images/prodcompare.svg";
 import wish from "../images/wish.svg";
 
 import watch2 from "../images/watch-01.avif";
-import addcart from "../images/add-cart.svg";
 import view from "../images/view.svg";
 
 
@@ -131,7 +129,7 @@ const Home = () => {
         <div className="container-fluid">
           <div className="row">
             <div className="col-12">
-              <div className="services d-flex align-items-center ">
+              <div className="services d-flex align-items-center  justify-content-between">
                 {services?.map((i, j) => {
                   return (
                     <div
@@ -140,7 +138,7 @@ const Home = () => {
                     >
                       <img src={i.image} alt="services" />
                       <div>
-                        <h6>{i.title}</h6>
+                        <h6 className="fs-6">{i.title}</h6>
                         <p className="mb-0">{i.tagline}</p>
                       </div>
                     </div>
