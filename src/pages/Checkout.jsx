@@ -110,7 +110,7 @@ const Checkout = () => {
       return;
     }
     const result = await axios.post(
-      "http://localhost:5050/api/user/order/checkout",
+      `https://ecommerce-backend-yp85.onrender.com/api/user/order/checkout`,
       { amount: totalAmount },
       config
     );
