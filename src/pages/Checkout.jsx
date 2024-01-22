@@ -211,7 +211,7 @@ const Checkout = () => {
         <div className="row">
           <div className="col-6">
             <div className="chechkout-left-data">
-              <h3 className="website-name">Digitic</h3>
+              <h3 className="website-name">Ecommerce</h3>
               <nav
                 style={{ "--bs-breadcrumb-divider": "'>';" }}
                 aria-label="breadcrumb"
@@ -368,7 +368,7 @@ const Checkout = () => {
                       <BiArrowBack className="me-2" /> Return to Cart
                     </Link>
                     <Link to="/cart" className="button">
-                      Continue to Shipping
+                      Continue to Shopping
                     </Link>
                     <button className="button" type="submit">
                       Place Order
