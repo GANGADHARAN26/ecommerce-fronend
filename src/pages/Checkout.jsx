@@ -111,7 +111,7 @@ const Checkout = () => {
     }
     const result = await axios.post(
       `https://ecommerce-backend-yp85.onrender.com/api/user/order/checkout`,
-      { amount: totalAmount },
+      { amount: (totalAmount+5)*100 },
       config
     );
     if (!result) {
